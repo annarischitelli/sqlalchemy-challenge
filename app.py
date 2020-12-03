@@ -85,6 +85,9 @@ def start(start):
     return jsonify(start_date) 
 
 # # #Route /api/v1.0/<start>/<end>
+
+#THANK YOU CAS!!!! YOU'RE SO PATIENT WITH ME!!! :)
+
 @app.route("/api/v1.0/<start>/<end>")
 def st_end (start, end):
     session = Session(engine)
