@@ -31,8 +31,8 @@ def main ():
         f"/api/v1.0/precipitation<br>"
         f"/api/v1.0/stations<br>"
         f"/api/v1.0/tobs<br>"
-        f"/api/v1.0/<start><br>"
-        f"/api/v1.0/<start>/<end>"
+        f"/api/v1.0/&lt;start&gt;<br>"
+        f"/api/v1.0/&lt;start&gt;/&lt;end&gt;"
     )
 
 # #Route /api/v1.0/precipitation
@@ -77,11 +77,9 @@ def tobs():
 @app.route("/api/v1.0/<start>")
 def start(start):
     session = Session(engine)
-    def calc_temps(start_date):
-        calc_temps('2017-03-01')
-        results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-            filter(Measurement.date >= start_date).all().\
-            order_by(Measurement.date.desc()).all()
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+        filter(Measurement.date >= start).\
+        order_by(Measurement.date.desc()).all()
     session.close()
     start_date = list(np.ravel(results))
     return jsonify(start_date) 
@@ -90,10 +88,7 @@ def start(start):
 @app.route("/api/v1.0/<start>/<end>")
 def st_end (start, end):
     session = Session(engine)
-    def calc_temps(start_date, end_date):
-        calc_temps('2017-03-01', '2017-03-15')
-        results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-        filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
     session.close()
     date_temp = list(np.ravel(results))
     return jsonify(date_temp)   
